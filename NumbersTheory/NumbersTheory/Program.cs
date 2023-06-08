@@ -19,7 +19,56 @@ namespace SheetWeekOne
             //NoldbachproblemVJudge();
             //LargestPrimefactorVJudge();
             //SummationOfPrimesVJudge();
-            NumberIntoSequenceVJudge();
+            //NumberIntoSequenceVJudge();
+
+            MinOperationsLeetCode(new int[10]);
+        }
+
+        private static int MinOperationsLeetCode(int[] nums)
+        {
+            var gcd = default(int);
+            var numberOfOnes = default(int);
+            foreach (var num in nums)
+            {
+                gcd = GCD(gcd, num);
+                numberOfOnes += num is 1 ? 1 : 0;
+            }
+
+            if (gcd is not 1)
+            {
+                return -1;
+            }
+
+            if (numberOfOnes is not 0)
+            {
+                return nums.Length - numberOfOnes;
+            }
+            var minimum = 1_000_000;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                var arrayElement = nums[i];
+                for (int j = i + 1; j < nums.Length; j++)
+                {
+                    arrayElement = GCD(arrayElement, nums[j]);
+                    if (arrayElement is 1)
+                    {
+                        minimum = Math.Min(minimum, j - i);
+                        break;
+                    }
+                }
+            }
+
+            return  minimum+nums.Length-1;
+        }
+
+        private static int GCD(int divided, int divisor)
+        {
+            if (divisor is 0)
+            {
+                return divided;
+            }
+            var reminder = divided % divisor;
+            return GCD(divisor, reminder);
         }
 
         private static void NumberIntoSequenceVJudge()
