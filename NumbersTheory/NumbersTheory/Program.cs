@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SheetWeekOne
+namespace NumbersTheory
 {
     internal class Program
     {
@@ -12,6 +12,8 @@ namespace SheetWeekOne
         private static Dictionary<int, int> _primeNumbersDictionary = new();
         static void Main(string[] args)
         {
+            //Console.WriteLine(ModularArithmetic.Inverse(3, 1));
+            //Console.WriteLine(BinaryExponentiation.Calculate(3, 10));
             //AlmostPrimeVJudge();
             //TPrimesVJudge();
             //TenThousandFirstprime();
@@ -20,10 +22,183 @@ namespace SheetWeekOne
             //LargestPrimefactorVJudge();
             //SummationOfPrimesVJudge();
             //NumberIntoSequenceVJudge();
+            //MinOperationsLeetCode(new int[10]);
+            //CalculateModules();
+            //TheEternalImmortalityCodeForces();
+            //ModularExponentiationCodeForces();
+            //BeautifulDivisorsCodeForces();
+            //SmallestMultiplevJudge();
+            //StringLCMVJudge();
 
-            MinOperationsLeetCode(new int[10]);
         }
 
+        private static void StringLCMVJudge()
+        {
+            var testCases = short.Parse(Console.ReadLine());
+            while (testCases-- is not 0)
+            {
+                var firstWord = Console.ReadLine();
+                var secondWord = Console.ReadLine();
+                var firstWordLength = firstWord.Length;
+                var secondWordLength = secondWord.Length;
+                var lcm = firstWordLength / GCD(firstWordLength, secondWordLength) * secondWordLength;
+                var firstWordstringBuilder = new StringBuilder(firstWord);
+                var secondWordstringBuilder = new StringBuilder(secondWord);
+                var firstWordReminder = (lcm - firstWordLength) is not 0 ? (lcm - firstWordLength) / firstWordLength : 0;
+                var secondWordReminder = (lcm - secondWordLength) is not 0 ? (lcm - secondWordLength) / secondWordLength : 0;
+                for (int i = 0; i < firstWordReminder; i++)
+                {
+                    firstWordstringBuilder.Append(firstWord);
+                }
+                for (int i = 0; i < secondWordReminder; i++)
+                {
+                    secondWordstringBuilder.Append(secondWord);
+                }
+
+                Console.WriteLine(firstWordstringBuilder.Equals(secondWordstringBuilder) ? firstWordstringBuilder : "-1");
+            }
+        }
+
+        private static void SmallestMultiplevJudge()
+        {
+            var testCases = short.Parse(Console.ReadLine());
+            while (testCases-- is not 0)
+            {
+                var length = short.Parse(Console.ReadLine());
+                var numberList = Enumerable.Range(2, length - 1).ToList();
+                var lcm = numberList.Aggregate(1, LCM);
+                Console.WriteLine(lcm);
+            }
+        }
+
+        private static int LCM(int firstNumber, int secondNumber) => firstNumber / GCD(firstNumber, secondNumber) * secondNumber;
+        private static void BeautifulDivisorsCodeForces()
+        {
+            var number = int.Parse(Console.ReadLine());
+            var divisors = GetAllDivisors(number);
+            var powers = GetAllIntPowers();
+            foreach (var divisor in divisors)
+            {
+                for (int i = 1; i < powers.Count(); i++)
+                {
+                    if ((powers[i] - 1) * powers[i - 1] == divisor)
+                    {
+                        Console.WriteLine(divisor);
+                        return;
+                    }
+                }
+            }
+
+        }
+
+        //private static IEnumerable<int> GetAllDivisors(int number)
+        //{
+        //    var boundary = (int)Math.Floor(Math.Sqrt(number));
+        //    for (int i = 1; i <= boundary; i++)
+        //    {
+        //        if (number % i == 0)
+        //        {
+        //            yield return i;
+        //            if (i * i != number)
+        //            {
+        //                yield return number / i;
+        //            }
+        //        }
+
+        //    }
+        //}
+
+        private static List<int> GetAllDivisors(int number)
+        {
+            var highList = new List<int>();
+            var lowList = new List<int>();
+            var boundary = (int)Math.Floor(Math.Sqrt(number));
+            for (int i = 1; i <= boundary; i++)
+            {
+                if (number % i == 0)
+                {
+                    lowList.Add(i);
+                    if (i * i != number)
+                    {
+                        highList.Add(number / i);
+                    }
+                }
+
+            }
+            highList.AddRange(lowList.OrderByDescending(number => number).ToList());
+            return highList;
+        }
+
+        private static List<int> GetAllIntPowers()
+        {
+            var list = new List<int>();
+            for (int i = 0; i < 17; i++)
+            {
+                list.Add((int)Math.Pow(2, i));
+            }
+            return list;
+        }
+
+        private static void ModularExponentiationCodeForces()
+        {
+            var power = int.Parse(Console.ReadLine());
+            var modules = int.Parse(Console.ReadLine());
+            if (power <= 27)
+            {
+                Console.WriteLine(modules % BinaryExponentiation.Calculate(2, power, 1));
+                return;
+            }
+            Console.WriteLine(modules);
+        }
+
+        private static void TheEternalImmortalityCodeForces()
+        {
+            (var first, var last) = Console.ReadLine()
+                .Split(' ')
+                .Select(long.Parse)
+                .ToTuple();
+            var result = 1E1 / 10;
+            var reminder = last - first;
+            if (reminder >= 10)
+            {
+                Console.WriteLine("0");
+                return;
+            }
+            for (long i = first + 1; i <= last; i++)
+            {
+                result *= (i % 10);
+                result %= 10;
+            }
+            Console.WriteLine(result);
+        }
+
+
+
+        private static void CalculateModules()
+        {
+            var number = int.Parse(Console.ReadLine());
+            var modules = int.Parse(Console.ReadLine());
+            var stringBuilder = new StringBuilder();
+            var innerStringBuilder = new StringBuilder();
+            for (int i = 0; i < modules; i++)
+            {
+                innerStringBuilder.Append($"{i} %  {modules}===>{i % modules}");
+                innerStringBuilder.AppendLine();
+            }
+            stringBuilder.Append(innerStringBuilder);
+            var length = number / modules;
+            var reminder = number % modules;
+            for (int i = 0; i < length; i++)
+            {
+                stringBuilder.Append(innerStringBuilder);
+            }
+            for (int i = 0; i < reminder; i++)
+            {
+                stringBuilder.Append($"{i} % {modules}===>{i % modules}");
+                stringBuilder.AppendLine();
+            }
+            Console.WriteLine(stringBuilder);
+        }
         private static int MinOperationsLeetCode(int[] nums)
         {
             var gcd = default(int);
@@ -43,7 +218,7 @@ namespace SheetWeekOne
             {
                 return nums.Length - numberOfOnes;
             }
-            var minimum = 1_000_000;
+            var minimum = (int)1E6;
             for (int i = 0; i < nums.Length; i++)
             {
                 var arrayElement = nums[i];
@@ -58,7 +233,7 @@ namespace SheetWeekOne
                 }
             }
 
-            return  minimum+nums.Length-1;
+            return minimum + nums.Length - 1;
         }
 
         private static int GCD(int divided, int divisor)
@@ -400,6 +575,11 @@ namespace SheetWeekOne
             }
             return count;
         }
+    }
 
+    public static class Extensions
+    {
+        public static Tuple<long, long> ToTuple(this IEnumerable<long> inputList)
+            => Tuple.Create(inputList.FirstOrDefault(), inputList.LastOrDefault());
     }
 }
