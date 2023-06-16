@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SheetWeekOne
 {
@@ -26,10 +27,116 @@ namespace SheetWeekOne
             //}
             //cout << ans << endl;
             //UnluckyTicketVJudge();
-            CDVJudge();
+            //CDVJudge();
+            //Console.WriteLine(FrequencySort("sttrrhhhhhhhhhhreeeeeee"));
+            //Console.WriteLine(JsonSerializer.Serialize(TwoSum(new int[] { 2, 7, 11, 15 }, 9)));
+            Console.WriteLine(LengthOfLongestSubstring("abcabcbbc"));
 
         }
 
+        ///"pwwkew"
+        ///pw
+        ///w
+
+        private static int LengthOfLongestSubstring(string s)
+        {
+            var longestStreak = 0;
+            var currentStreak = 0;
+            int startIndex = 0;
+            var visitedChars = new HashSet<char>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                var currentChar = s[i];
+                if (!visitedChars.Add(currentChar)) 
+                {
+                    while (s[startIndex] != currentChar)
+                    {
+                        visitedChars.Remove(s[startIndex]);
+                        startIndex++;
+                    }
+                    startIndex++;
+                }
+                currentStreak = i - startIndex + 1;
+                longestStreak = Math.Max(longestStreak, currentStreak);
+            }
+
+            return longestStreak;
+
+        }
+
+        private static int[] TwoSum(int[] nums, int target)
+        {
+            var indiciesDictionary = new Dictionary<int, int>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (indiciesDictionary.TryGetValue(target - nums[i], out int index))
+                {
+                    return new int[] { index, i };
+                }
+
+                indiciesDictionary[nums[i]] = i;
+            }
+            return Array.Empty<int>();
+        }
+        private static string FrequencySort(string s)
+        {
+            var charcterDictiory = new Dictionary<char, int>();
+            int maxCount = 0;
+
+            foreach (char @char in s)
+            {
+                if (charcterDictiory.TryGetValue(@char, out int count))
+                {
+                    count++;
+                    charcterDictiory[@char] = count;
+                    if (count > maxCount)
+                        maxCount = count;
+                }
+                else
+                {
+                    charcterDictiory[@char] = 1;
+                    if (maxCount < 1)
+                        maxCount = 1;
+                }
+            }
+
+            var result = new StringBuilder(s.Length);
+
+            for (int i = maxCount; i > 0; i--)
+            {
+                foreach (var pair in charcterDictiory)
+                {
+                    if (pair.Value == i)
+                        result.Append(pair.Key, i);
+                }
+            }
+
+            return result.ToString();
+
+
+
+
+            //var charCounts = new Dictionary<char, int>();
+            //foreach (char charcter in s)
+            //{
+            //    if (!charCounts.TryAdd(charcter, 1))
+            //    {
+            //        charCounts[charcter]++;
+            //    }
+            //}
+
+            //var sortedChars = charCounts.OrderByDescending(kv => kv.Value).SelectMany(kv => Enumerable.Repeat(kv.Key, kv.Value));
+
+            //return new string(sortedChars.ToArray());
+
+
+            //return s.GroupBy(charcter => charcter)
+            //    .OrderByDescending(group => group.Count())
+            //    .SelectMany(group => group)
+            //    .Aggregate(new StringBuilder(), (current, next) => current.Append(next))
+            //    .ToString()
+            //    ;
+        }
         private static void CDVJudge()
         {
             var line = string.Empty;
