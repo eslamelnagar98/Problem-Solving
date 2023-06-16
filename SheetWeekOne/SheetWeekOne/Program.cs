@@ -30,7 +30,7 @@ namespace SheetWeekOne
             //CDVJudge();
             //Console.WriteLine(FrequencySort("sttrrhhhhhhhhhhreeeeeee"));
             //Console.WriteLine(JsonSerializer.Serialize(TwoSum(new int[] { 2, 7, 11, 15 }, 9)));
-            Console.WriteLine(LengthOfLongestSubstring("abcabcbbc"));
+            //Console.WriteLine(LengthOfLongestSubstring("abcabcbbc"));
 
         }
 
