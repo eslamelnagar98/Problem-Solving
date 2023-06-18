@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace SheetWeekOne
 {
@@ -9,6 +11,16 @@ namespace SheetWeekOne
     {
         static void Main(string[] args)
         {
+            var pooledArray = ArrayPool<int>.Shared.Rent(126);
+            for (int i = 0; i < pooledArray.Length; i++)
+            {
+                pooledArray[i] = i * 5;
+            }
+            Console.WriteLine(pooledArray.GetHashCode());
+            ArrayPool<int>.Shared.Return(pooledArray);
+            var secondPooledArray = ArrayPool<int>.Shared.Rent(110);
+            Console.WriteLine(secondPooledArray.GetHashCode());
+            Console.WriteLine(JsonSerializer.Serialize(secondPooledArray));
             //RotateLeftVJudge();
             //GreedyFloristVJudge();
             //PermutationVJudge();
@@ -47,7 +59,7 @@ namespace SheetWeekOne
             for (int i = 0; i < s.Length; i++)
             {
                 var currentChar = s[i];
-                if (!visitedChars.Add(currentChar)) 
+                if (!visitedChars.Add(currentChar))
                 {
                     while (s[startIndex] != currentChar)
                     {

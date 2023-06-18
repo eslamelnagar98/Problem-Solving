@@ -29,7 +29,10 @@ namespace NumbersTheory
             //BeautifulDivisorsCodeForces();
             //SmallestMultiplevJudge();
             //StringLCMVJudge();
-
+            //Console.WriteLine(ModularArithmetic.Inverse(17, 13));
+            //.WriteLine(ModularArithmetic.Factorial(1000, 1000000007));
+            //Console.WriteLine(ModularArithmetic.NCR(10, 3, 1000000007));
+            Console.WriteLine(ModularArithmetic.Multiplication(7, 10, 6));
         }
 
         private static void StringLCMVJudge()

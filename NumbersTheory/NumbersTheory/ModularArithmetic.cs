@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace NumbersTheory;
 public static class ModularArithmetic
 {
@@ -11,11 +12,10 @@ public static class ModularArithmetic
         => firstNumber % modulesValue * secondNumber % modulesValue % modulesValue;
     public static long Inverse(long number, long modulesValue)
     {
-        if ((number & 1) is 0)
+        if (GCD(number, modulesValue) is not 1)
         {
             return default;
         }
-
         if (number % modulesValue is 0)
         {
             return default;
@@ -23,7 +23,7 @@ public static class ModularArithmetic
 
         if (IsPrime(number) && modulesValue >= 2)
         {
-            return FastPower(number, modulesValue - 2);
+            return FastPower(number, modulesValue - 2, modulesValue);
         }
 
         for (int i = 0; i < modulesValue; i++)
@@ -35,6 +35,31 @@ public static class ModularArithmetic
         }
         return default;
     }
+
+
+    private static long FastPower(long baseValue, long exponent, long modulus, long result = 1)
+    {
+        if (modulus is 1)
+        {
+            return 0;
+        }
+        if (exponent <= 0)
+        {
+            if (result < 0)
+            {
+                return (result + modulus) % modulus;
+            }
+            return result;
+        }
+        if ((exponent & 1) is 1)
+        {
+            result = (result * baseValue) % modulus;
+        }
+        baseValue = (baseValue*baseValue) % modulus;
+        exponent >>= 1;
+        return FastPower(baseValue, exponent, modulus, result);
+    }
+
 
     private static bool IsPrime(long number)
     {
@@ -61,15 +86,50 @@ public static class ModularArithmetic
         }
         return true;
     }
-
-    private static long FastPower(long number, long power)
+    private static long GCD(long divided, long divisor)
     {
-        if (power is 0)
+        if (divisor is 0)
         {
-            return 1;
+            return divided;
         }
-        var sqrt = FastPower(number, power >> 1);
-        return sqrt * sqrt * ((power & 1) is 1 ? number : 1);
+        var reminder = divided % divisor;
+        return GCD(divisor, reminder);
+    }
+
+    public static long Factorial(long number, long modules)
+    {
+        var result = 0L + 1;
+        for (int i = 2; i <= number; i++)
+        {
+            result = (result * i) % modules;
+        }
+        return result;
+    }
+
+    public static long NPR(long number, long r, long modules)
+    {
+        ///1 2 3 4
+        ///1 2
+        ///1 2 3 4
+        var result = 0L + 1;
+        for (long i = number - r + 1; i <= number; i++)
+        {
+            result = (result * i) % modules;
+        }
+        return result;
+    }
+
+    public static long NCR(long number, long r, long modulus)
+    {
+        if (number < 0 || r < 0 || r > number)
+        {
+            throw new ArgumentException("Invalid values for n and r.");
+        }
+        long numerator = Factorial(number, modulus);
+        long denominator = (Factorial(r, modulus) * Factorial(number - r, modulus)) % modulus;
+        long modularInverse = Inverse(denominator, modulus);
+        long result = (numerator * modularInverse) % modulus;
+        return result;
     }
 }
 
