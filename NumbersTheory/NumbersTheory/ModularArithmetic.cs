@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace NumbersTheory;
 public static class ModularArithmetic
 {
@@ -55,7 +54,7 @@ public static class ModularArithmetic
         {
             result = (result * baseValue) % modulus;
         }
-        baseValue = (baseValue*baseValue) % modulus;
+        baseValue = (baseValue * baseValue) % modulus;
         exponent >>= 1;
         return FastPower(baseValue, exponent, modulus, result);
     }
@@ -86,15 +85,7 @@ public static class ModularArithmetic
         }
         return true;
     }
-    private static long GCD(long divided, long divisor)
-    {
-        if (divisor is 0)
-        {
-            return divided;
-        }
-        var reminder = divided % divisor;
-        return GCD(divisor, reminder);
-    }
+    
 
     public static long Factorial(long number, long modules)
     {
@@ -130,6 +121,27 @@ public static class ModularArithmetic
         long modularInverse = Inverse(denominator, modulus);
         long result = (numerator * modularInverse) % modulus;
         return result;
+    }
+    public static Tuple<int, int, int> BezoutTheorem(int divided, int divisor)
+    {
+        if (divisor is 0)
+        {
+            return Tuple.Create(1, 0, divided);
+        }
+        var (x1, y1, d) = BezoutTheorem(divisor, divided % divisor);
+        var x = y1;
+        var y = x1 - y1 * (divided / divisor);
+        return Tuple.Create(x, y, d);
+    }
+
+    private static long GCD(long divided, long divisor)
+    {
+        if (divisor is 0)
+        {
+            return divided;
+        }
+        var reminder = divided % divisor;
+        return GCD(divisor, reminder);
     }
 }
 

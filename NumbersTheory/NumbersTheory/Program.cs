@@ -32,7 +32,9 @@ namespace NumbersTheory
             //Console.WriteLine(ModularArithmetic.Inverse(17, 13));
             //.WriteLine(ModularArithmetic.Factorial(1000, 1000000007));
             //Console.WriteLine(ModularArithmetic.NCR(10, 3, 1000000007));
-            Console.WriteLine(ModularArithmetic.Multiplication(7, 10, 6));
+            //Console.WriteLine(ModularArithmetic.Multiplication(7, 10, 6));
+            (var x, var y, var gcd) = ModularArithmetic.BezoutTheorem(16, 10);
+            Console.WriteLine($"{x},{y},{gcd}");
         }
 
         private static void StringLCMVJudge()
